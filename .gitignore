@@ -1,0 +1,70 @@
+# ----------------------
+# Python cache files
+# ----------------------
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ----------------------
+# Virtual environments
+# ----------------------
+venv/
+.venv/
+env/
+ENV/
+
+# ----------------------
+# Environment variables
+# ----------------------
+.env
+.env.*
+*.env
+
+# ----------------------
+# IDE / Editor files
+# ----------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ----------------------
+# OS files
+# ----------------------
+.DS_Store
+Thumbs.db
+
+# ----------------------
+# Logs
+# ----------------------
+*.log
+
+# ----------------------
+# Test / Coverage
+# ----------------------
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ----------------------
+# Build / Distribution
+# ----------------------
+build/
+dist/
+*.egg-info/
+
+# ----------------------
+# FastAPI / ASGI
+# ----------------------
+uvicorn.log
+
+# ----------------------
+# SQLite / local DB
+# ----------------------
+*.sqlite3
+
+# ----------------------
+# Jupyter
+# ----------------------
+.ipynb_checkpoints/
+myenv
