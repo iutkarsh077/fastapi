@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from fastapi import FastAPI, Path, HTTPException, Query
+from fastapi import FastAPI, Path, HTTPException, Query, Response, Cookie, Header, Request
 import json
 from fastapi.responses import JSONResponse
 from models import User, UpdateUser
@@ -10,6 +10,18 @@ load_dotenv()
 app = FastAPI()
 
 conn = AsyncMongoClient(os.environ.get("uri"))
+
+
+@app.middleware("http")
+async def MyMiddleware(request: Request, call_next):
+    print("Before: ", request)
+    response = await call_next(request)
+    
+    response.status_code = 501
+    
+    print("After: ", response.status_code)
+    
+    return response
 
 @app.get("/health")
 def HealthCheck():
@@ -69,3 +81,37 @@ async def DeleteUser(email: str = Query(..., description="User email to delete",
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail="Internal Server error")
+    
+@app.get("/set-cookie")
+def SetMyCookie(response: Response, utkarsh: str = Cookie(default=None)):
+    response.set_cookie(
+        key="utkarsh",
+        value="my-cookie",
+        max_age=60 * 60,
+        samesite="lax",
+        httponly=True,
+        secure=True
+    )
+    
+    print("Cookie data is: ", utkarsh)
+    return {"message": "Cookie has been set"}
+
+
+@app.delete("/delete-cookie")
+def DeleteCookie(response: Response):
+    response = JSONResponse(status_code=200, content={"message": "Cookie is deleted successfully"})
+    response.delete_cookie("utkarsh")
+    
+    return response
+
+
+@app.get("/headers")
+def getHeaders(request: Request, response: Response, user_agent: str = Header(default=None)):
+    response = JSONResponse(status_code=200, content={"message": "Got headers"})
+    
+    # print("Cookies are: ", request._cookies)
+    print("headers are: ", dict(request.headers))
+    
+    return response
+
+
