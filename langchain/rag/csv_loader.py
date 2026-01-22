@@ -1,28 +1,26 @@
-from langchain_community.document_loaders import TextLoader
-from langchain_core.prompts import PromptTemplate
+from dotenv import load_dotenv
+from langchain_community.document_loaders.csv_loader import CSVLoader
 from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableSequence
-from dotenv import load_dotenv
 
 load_dotenv()
-loader = TextLoader('./poem.txt', encoding='utf-8')
+loader = CSVLoader(file_path="../public/MOCK_DATA.csv")
 
+data = loader.load()
 prompt = PromptTemplate(
-    template="Write a summary on the topic of {topic}",
+    template="Extract all the emails from this {topic}",
     input_variables=["topic"]
 )
-
 model = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite", max_tokens=500)
 
 parser = StrOutputParser()
 
-docs = loader.load()
-
-print("after loading: ", docs)
 
 chain = RunnableSequence(prompt, model, parser)
 
-result = chain.invoke({ "topic": docs })
+result = chain.invoke({ "topic": data })
+
 
 print(result)
