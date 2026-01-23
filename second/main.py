@@ -5,6 +5,7 @@ import json
 from fastapi.responses import JSONResponse
 from models import User, UpdateUser
 from pymongo import AsyncMongoClient
+import requests
 
 load_dotenv()
 app = FastAPI()
