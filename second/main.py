@@ -21,7 +21,6 @@ async def MyMiddleware(request: Request, call_next):
     response.status_code = 501
     
     print("After: ", response.status_code)
-    
     return response
 
 @app.get("/health")
